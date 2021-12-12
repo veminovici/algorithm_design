@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import Data.String.Strip
 
 main :: IO ()
-main = someFunc
+main = interact strip
