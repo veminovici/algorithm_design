@@ -12,15 +12,39 @@ import Data.SymList
 main :: IO ()
 main = hspec spec
 
+isNothing :: Maybe a -> Bool
+isNothing Nothing = True
+isNothing _ = False
+
 prop_from_from xs = 
     fromSL (fromList xs) == xs
     where types = xs::[Int]
 
-prop_RevRev xs = reverse (reverse xs) == xs
+prop_cons x xs =
+    let xs' = fromList xs in x : fromSL xs' == fromSL (consSL x xs')
+    where types = xs::[Int]
+
+prop_snoc x xs =
+    let xs' = fromList xs in fromSL xs' ++ [x] == fromSL (snocSL x xs')
+    where types = xs::[Int]
+
+prop_head xs =
+    case xs of
+        [] -> let xs' = fromList [] in isNothing (headSL xs')
+        xs -> let xs' = fromList xs in Just (head (fromSL xs')) == headSL xs';
+    where types = xs::[Int]
+
+prop_last xs =
+    case xs of
+        [] -> let xs' = fromList [] in isNothing (lastSL xs')
+        xs -> let xs' = fromList xs in Just (last (fromSL xs')) == lastSL xs';
     where types = xs::[Int]
 
 spec :: Spec
 spec = do
     describe "SymList" $ do
         it "is equal when apply from-from" $ property $ prop_from_from
-        it "is equal to a list" $ property $ prop_RevRev
+        it "holds the cons invariant" $ property $ prop_cons
+        it "holds the snoc invariant" $ property $ prop_snoc
+        it "holds the head invariant" $ property $ prop_head
+        it "holds the last invariant" $ property $ prop_last

@@ -3,6 +3,9 @@ module Data.SymList (
   , consSL
   , fromList
   , fromSL
+  , headSL
+  , lastSL
+  , snocSL
 ) where
 
 import Data.List
@@ -17,7 +20,7 @@ fromList = foldr consSL ([], [])
 fromSL :: SymList a -> [a]
 fromSL (xs, ys) = xs ++ reverse ys
 
--- | Returns True if the list is empty or contains one item.
+-- | Returns True if the list is empty or contains one item
 nullOrSingle :: [a] -> Bool
 nullOrSingle [] = True
 nullOrSingle [x] = True
@@ -30,7 +33,28 @@ checkInvariants (xs, ys)
   | null ys = if nullOrSingle xs then (xs, ys) else error "Invariant 2 broken" 
   | otherwise = (xs, ys)
 
+-- | Inserts the item at the begining of the list
 consSL :: a -> SymList a -> SymList a
 consSL x ([], ys) = ([x], ys)
 consSL x ([y], []) = ([x], [y])
 consSL x (xs, ys) = (x : xs, ys)
+
+-- | Inserts the item at the end of the list
+snocSL :: a -> SymList a -> SymList a
+snocSL x (xs, []) = (xs, [x])
+snocSL x ([], [y]) = ([y], [x])
+snocSL x (xs, ys) = (xs, x : ys)
+
+-- | Returns the header of the list
+headSL :: SymList a -> Maybe a
+headSL ([], []) = Nothing
+headSL ([], [y]) = Just $ y
+headSL ([], _) = error "headSL - invariant2 broken"
+headSL (x:_, _) = Just x
+
+-- | Returns the last item ot the list
+lastSL :: SymList a -> Maybe a
+lastSL ([], []) = Nothing
+lastSL ([x], []) = Just x
+lastSL (_, []) = error "lastSL - invariant 1 broken"
+lastSL (_, y:_) = Just y 
