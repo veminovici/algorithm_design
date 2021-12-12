@@ -7,6 +7,7 @@ module Data.SymList (
   , initSL
   , lastSL
   , lengthSL
+  , nilSL
   , nullSL
   , singleSL
   , snocSL
@@ -100,3 +101,7 @@ initSL (xs, _:ys) = (xs, ys)
 -- | Returns the length of the list
 lengthSL :: SymList a -> Int
 lengthSL (xs, ys) = length  xs + length ys
+
+-- | The empty list
+nilSL = ([], [])
+
