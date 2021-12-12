@@ -62,6 +62,10 @@ prop_init xs =
         xs -> let xs' = fromList xs in fromSL (initSL xs') == init xs
     where types = xs::[Int]
 
+prop_length xs =
+    let xs' = fromList xs in length xs == lengthSL xs'
+    where types = xs::[Int]
+
 spec :: Spec
 spec = do
     describe "SymList" $ do
@@ -74,3 +78,4 @@ spec = do
         it "holds the last invariant" $ property $ prop_last
         it "holds the tail invariant" $ property $ prop_tail
         it "holds the init invariant" $ property $ prop_init
+        it "holds the length invariant" $ property $ prop_length

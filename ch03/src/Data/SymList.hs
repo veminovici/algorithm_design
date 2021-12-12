@@ -6,6 +6,7 @@ module Data.SymList (
   , headSL
   , initSL
   , lastSL
+  , lengthSL
   , nullSL
   , singleSL
   , snocSL
@@ -95,3 +96,7 @@ initSL (xs, [_]) = (us, reverse vs)
         d = length xs `div` 2
         (us, vs) = splitAt d xs
 initSL (xs, _:ys) = (xs, ys)
+
+-- | Returns the length of the list
+lengthSL :: SymList a -> Int
+lengthSL (xs, ys) = length  xs + length ys
