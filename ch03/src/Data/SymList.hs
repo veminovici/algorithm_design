@@ -4,8 +4,11 @@ module Data.SymList (
   , fromList
   , fromSL
   , headSL
+  , initSL
   , lastSL
+  , nullSL
   , snocSL
+  , tailSL
 ) where
 
 import Data.List
@@ -33,6 +36,11 @@ checkInvariants (xs, ys)
   | null ys = if nullOrSingle xs then (xs, ys) else error "Invariant 2 broken" 
   | otherwise = (xs, ys)
 
+-- | Returns true if the list is empty
+nullSL :: SymList a -> Bool
+nullSL ([], []) = True
+nullSL _ = False
+
 -- | Inserts the item at the begining of the list
 consSL :: a -> SymList a -> SymList a
 consSL x ([], ys) = ([x], ys)
@@ -57,4 +65,18 @@ lastSL :: SymList a -> Maybe a
 lastSL ([], []) = Nothing
 lastSL ([x], []) = Just x
 lastSL (_, []) = error "lastSL - invariant 1 broken"
-lastSL (_, y:_) = Just y 
+lastSL (_, y:_) = Just y
+
+-- | Return the tail of the list
+tailSL :: SymList a -> SymList a
+tailSL ([], []) = ([], [])
+tailSL ([], [y]) = ([], [])
+tailSL ([], _) = error "tailSL - invariant 2 broken"
+tailSL (_:xs, ys) = (xs, ys)
+
+-- | Return the prefix of the list
+initSL :: SymList a -> SymList a
+initSL ([], []) = ([], [])
+initSL ([x], []) = ([], [])
+initSL (_, []) = error "initSL - invariant1 broken"
+initSL (xs, _:ys) = (xs, ys)

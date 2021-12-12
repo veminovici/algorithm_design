@@ -20,6 +20,10 @@ prop_from_from xs =
     fromSL (fromList xs) == xs
     where types = xs::[Int]
 
+prop_null xs =
+    let xs' = fromList xs in null xs == nullSL xs'
+    where types = xs::[Int]
+
 prop_cons x xs =
     let xs' = fromList xs in x : fromSL xs' == fromSL (consSL x xs')
     where types = xs::[Int]
@@ -40,11 +44,26 @@ prop_last xs =
         xs -> let xs' = fromList xs in Just (last (fromSL xs')) == lastSL xs';
     where types = xs::[Int]
 
+prop_tail xs =
+    case xs of
+        [] -> let xs' = fromList [] in nullSL (tailSL xs')
+        xs -> let xs' = fromList xs in fromSL (tailSL xs') == tail xs
+    where types = xs::[Int]
+
+prop_init xs =
+    case xs of
+        [] -> let xs' = fromList [] in nullSL (initSL xs')
+        xs -> let xs' = fromList xs in fromSL (initSL xs') == init xs
+    where types = xs::[Int]
+
 spec :: Spec
 spec = do
     describe "SymList" $ do
         it "is equal when apply from-from" $ property $ prop_from_from
         it "holds the cons invariant" $ property $ prop_cons
+        it "holds the null invariant" $ property $ prop_null
         it "holds the snoc invariant" $ property $ prop_snoc
         it "holds the head invariant" $ property $ prop_head
         it "holds the last invariant" $ property $ prop_last
+        it "holds the tail invariant" $ property $ prop_tail
+        it "holds the init invariant" $ property $ prop_init
