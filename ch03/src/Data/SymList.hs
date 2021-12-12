@@ -7,6 +7,7 @@ module Data.SymList (
   , initSL
   , lastSL
   , nullSL
+  , singleSL
   , snocSL
   , tailSL
 ) where
@@ -40,6 +41,12 @@ checkInvariants (xs, ys)
 nullSL :: SymList a -> Bool
 nullSL ([], []) = True
 nullSL _ = False
+
+-- | Returns True if the lsit has one item
+singleSL :: SymList a -> Bool
+singleSL ([_], []) = True
+singleSL ([], [_]) = True
+singleSL (_, _) = False
 
 -- | Inserts the item at the begining of the list
 consSL :: a -> SymList a -> SymList a

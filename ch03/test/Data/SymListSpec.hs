@@ -24,6 +24,12 @@ prop_null xs =
     let xs' = fromList xs in null xs == nullSL xs'
     where types = xs::[Int]
 
+prop_single xs =
+    case xs of
+        [_] -> let xs' = fromList xs in singleSL xs'
+        xs -> let xs' = fromList xs in not $ singleSL xs'
+    where types = xs::[Int]
+
 prop_cons x xs =
     let xs' = fromList xs in x : fromSL xs' == fromSL (consSL x xs')
     where types = xs::[Int]
@@ -62,6 +68,7 @@ spec = do
         it "is equal when apply from-from" $ property $ prop_from_from
         it "holds the cons invariant" $ property $ prop_cons
         it "holds the null invariant" $ property $ prop_null
+        it "holds the single invariant" $ property $ prop_single
         it "holds the snoc invariant" $ property $ prop_snoc
         it "holds the head invariant" $ property $ prop_head
         it "holds the last invariant" $ property $ prop_last
