@@ -12,10 +12,15 @@ import Data.SymList
 main :: IO ()
 main = hspec spec
 
+prop_from_from xs = 
+    fromSL (fromList xs) == xs
+    where types = xs::[Int]
+
 prop_RevRev xs = reverse (reverse xs) == xs
     where types = xs::[Int]
 
 spec :: Spec
 spec = do
     describe "SymList" $ do
+        it "is equal when apply from-from" $ property $ prop_from_from
         it "is equal to a list" $ property $ prop_RevRev
