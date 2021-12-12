@@ -77,13 +77,21 @@ lastSL (_, y:_) = Just y
 -- | Return the tail of the list
 tailSL :: SymList a -> SymList a
 tailSL ([], []) = ([], [])
-tailSL ([], [y]) = ([], [])
+tailSL ([], [_]) = ([], [])
 tailSL ([], _) = error "tailSL - invariant 2 broken"
+tailSL ([_], ys) =  (reverse vs, us)
+    where
+        d = length ys `div` 2
+        (us, vs) = splitAt d ys
 tailSL (_:xs, ys) = (xs, ys)
 
 -- | Return the prefix of the list
 initSL :: SymList a -> SymList a
 initSL ([], []) = ([], [])
-initSL ([x], []) = ([], [])
+initSL ([_], []) = ([], [])
 initSL (_, []) = error "initSL - invariant1 broken"
+initSL (xs, [_]) = (us, reverse vs)
+    where
+        d = length xs `div` 2
+        (us, vs) = splitAt d xs
 initSL (xs, _:ys) = (xs, ys)
